@@ -1,0 +1,1 @@
+This is a website meant to help calculate the amount of money you should pay for a comic book collection based on the value of the collection, your seller fees, your costs such as shipping per item, and the profit margin you intend to use. This is nothing complicated or special but just a vibecoded calculator to make life easier for collectors.

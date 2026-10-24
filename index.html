@@ -1,313 +1,58 @@
 <!doctype html>
 <html lang="en">
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Panel — Dealer Buying Calculator</title>
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="color-scheme" content="light"><title>Shogun Comics Buying Calculator</title>
 <style>
-*{box-sizing:border-box}
-body{margin:0;background:#f5f6f0;color:#243c32;
-font:15px system-ui,sans-serif}
-main{max-width:1050px;margin:auto;padding:35px 20px}
-.brand{font-size:28px;font-weight:800}
-h1{font-size:36px;letter-spacing:-1.5px;margin-bottom:10px}
-p{color:#667568;line-height:1.6}
-.layout{display:grid;grid-template-columns:1fr 320px;gap:20px}
-.card{background:white;border:1px solid #dce3d5;
-border-radius:12px;padding:22px;margin-bottom:20px}
-h2{font-size:18px;margin-top:0}
-label{display:block;font-size:13px}
-input{width:100%;padding:10px;border:1px solid #ccd6c5;
-border-radius:5px;font:inherit;background:white;color:#243c32}
-input:focus{outline:2px solid #83a265}
-button{border:1px solid #cbd7c0;border-radius:5px;
-padding:10px 14px;background:#eef3e7;color:#304a30;
-font:inherit;cursor:pointer}
-button:hover{background:#e1ebd5}
-.fields{display:grid;grid-template-columns:1fr 1fr;gap:16px}
-.fields input{margin-top:6px}
-.table{overflow:auto}
-table{width:100%;border-collapse:collapse;min-width:460px}
-th{text-align:left;font-size:11px;color:#738169;padding:10px 4px}
-td{padding:5px 3px}
-td:first-child{width:44%}
-td input{padding:8px 5px;font-size:13px}
-td button{padding:6px;background:white;border:0}
-.offer{background:#244437;color:white}
-.offer p{color:#c5d5bf}
-.amount{font-size:52px;font-weight:700;letter-spacing:-2px}
-.line{display:flex;justify-content:space-between;
-gap:12px;margin:16px 0;font-size:13px}
-hr{border:0;border-top:1px solid #52705a;margin:22px 0}
-#verdict{padding:12px;background:#355641;
-border-radius:5px;font-size:13px;line-height:1.6}
-.scenarios{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
-.scenario{padding:15px;border:1px solid #d9e2cf;
-border-radius:8px;background:#f6f8f0}
-.scenario strong{display:block;font-size:25px;margin:12px 0}
-small{color:#75826c}
-footer{font-size:12px;color:#738169}
-.actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:15px}
-@media(max-width:760px){
-.layout{grid-template-columns:1fr}
-h1{font-size:29px}
-.scenarios{gap:6px}
-.scenario{padding:10px}
-.scenario strong{font-size:21px}
-}
-</style>
-<main>
-<div class="brand">▥ panel.</div>
-<h1>A better offer starts here.</h1>
-<p>Know your numbers before you buy a comic collection.</p>
-<div class="layout">
-<div>
-<section class="card">
-<h2>01 · The collection</h2>
-<label>Collection name
-<input id="name" placeholder="Saturday shop collection">
-</label>
-<div class="table">
-<table>
-<thead><tr>
-<th>Book / lot</th><th>Qty</th><th>Sale / book $</th>
-<th>Prep / book $</th><th></th>
-</tr></thead>
-<tbody id="books"></tbody>
-</table>
-</div>
-<div class="actions">
-<button id="add">+ Add book or lot</button>
-<button id="example">Load example</button>
-</div>
-<p><small>Enter your own sale estimates. For a lot sold together,
-use quantity 1 and the whole lot’s price.</small></p>
+*{box-sizing:border-box}body{margin:0;background:#f5f6f0;color:#243c32;font:15px system-ui,sans-serif}main{max-width:1100px;margin:auto;padding:36px 20px}h1{font-size:34px;letter-spacing:-1px;margin:0 0 8px}h2{font-size:18px;margin:0 0 20px}p{color:#667568;line-height:1.6}.intro{margin:0 0 30px}.layout{display:grid;grid-template-columns:minmax(0,1fr) 330px;gap:20px}.card{background:#fff;border:1px solid #dce3d5;border-radius:12px;padding:24px;margin-bottom:20px}input{width:100%;padding:12px;border:1px solid #ccd6c5;border-radius:6px;font:inherit;background:white;color:#243c32}input:focus-visible,button:focus-visible,summary:focus-visible{outline:3px solid #83a265;outline-offset:3px}button{border:1px solid #cbd7c0;border-radius:6px;padding:10px 14px;background:#eef3e7;color:#304a30;font:inherit;cursor:pointer}button:hover{background:#e1ebd5}.mode{display:flex;gap:6px;background:#f1f4eb;padding:5px;border-radius:8px;margin-bottom:22px}.mode button{flex:1;background:transparent;border-color:transparent;font-size:13px}.mode button[aria-pressed=true]{background:#244437;color:#fff}.fields{display:grid;grid-template-columns:1fr 1fr;gap:22px 16px}.field-head{display:flex;align-items:center;gap:8px;margin-bottom:8px;font-size:13px}.tip{position:relative;display:inline-block;font-size:12px}.tip summary{cursor:pointer;list-style:none;display:grid;place-items:center;width:18px;height:18px;border:1px solid #a2b293;border-radius:50%;color:#5f7652;font-size:11px}.tip summary::-webkit-details-marker{display:none}.tip span{display:none;position:absolute;z-index:5;left:-110px;top:25px;width:240px;padding:13px;border-radius:7px;background:#243c32;color:#fff;box-shadow:0 4px 15px #0002;line-height:1.6;font-weight:400}.tip:hover span,.tip[open] span,.tip:focus-within span{display:block}.hint{font-size:12px;color:#75826c;line-height:1.6}.field-value{font-size:25px;font-weight:600}.table-wrap{overflow:auto}table{width:100%;border-collapse:collapse;min-width:390px}th{text-align:left;font-size:11px;color:#738169;padding:10px 4px}td{padding:5px 3px}td:first-child{width:50%}td input{padding:8px 5px;font-size:13px}td button{padding:6px;background:white;border:0}.actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:16px}.offer{background:#244437;color:white;align-self:start}.offer p{color:#c5d5bf}.amount{font-size:52px;font-weight:700;letter-spacing:-2px}.line{display:flex;justify-content:space-between;gap:12px;margin:17px 0;font-size:13px}hr{border:0;border-top:1px solid #52705a;margin:22px 0}#verdict{padding:13px;background:#355641;border-radius:6px;font-size:13px;line-height:1.7}#verdict.warning{background:#5a4b32;color:#ffe0ac}.limits{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}.limit{padding:18px;border:1px solid #d9e2cf;border-radius:8px;background:#f6f8f0}.limit.target{border-color:#829a6b;background:#eef4e5}.limit strong{display:block;font-size:29px;margin:12px 0}.limit h3{font-size:14px;margin:0}.limit p{font-size:12px;margin:0}.limit small{display:block;margin-top:12px;color:#687660;font-size:11px}.limits-intro{font-size:13px;margin-top:-8px;margin-bottom:20px}.footer{font-size:12px;color:#738169;margin-top:20px}#storage{font-size:12px;color:#738169}[hidden]{display:none!important}@media(max-width:760px){.layout{grid-template-columns:1fr}h1{font-size:28px}.limits{grid-template-columns:1fr}.limit strong{font-size:28px}.card{padding:20px}.fields{grid-template-columns:1fr}.tip span{left:-150px}main{padding:28px 16px}}
+</style></head>
+<body><main>
+<h1>Shogun Comics Buying Calculator</h1>
+<p class="intro">Owned and operated by Frank and Logan Walters</p>
+<div class="layout"><div>
+<section class="card"><h2>01 · What is the collection worth?</h2>
+<div class="mode" role="group" aria-label="Collection value input mode"><button id="total-mode" type="button" aria-pressed="true">Enter total value</button><button id="books-mode" type="button" aria-pressed="false">Add individual books</button></div>
+<div id="total-panel"><div class="field-head"><label for="value">Estimated resale value ($)</label><details class="tip"><summary aria-label="About estimated resale value">i</summary><span>The total you expect to collect when selling the books, before fees and expenses. Use realistic sold prices, rather than asking prices. This is not what you plan to pay for the collection.</span></details></div><input id="value" class="field-value" type="number" min="0" step=".01" placeholder="e.g. 5,000"><p class="hint">Already know the collection’s value? That’s all you need to start.</p></div>
+<div id="books-panel" hidden><div class="table-wrap"><table><thead><tr><th>Book / lot</th><th>Qty</th><th>Sale / book $</th><th></th></tr></thead><tbody id="books"></tbody></table></div><div class="actions"><button id="add" type="button">+ Add book or lot</button></div><p class="hint">Sale price is per book. For a lot sold together, enter quantity 1 and the full lot price. Total: <strong id="books-total"></strong></p></div>
 </section>
-<section class="card">
-<h2>02 · The selling plan</h2>
-<div class="fields">
-<label>Selling fees (%)
-<input id="fee" type="number" min="0" max="100" step=".1">
-</label>
-<label>Shipping & packing per book ($)
-<input id="shipping" type="number" min="0" step=".01">
-</label>
-<label>Other collection expenses ($)
-<input id="overhead" type="number" min="0" step=".01">
-</label>
-<label>Target profit margin (%)
-<input id="margin" type="number" min="0" max="100" step=".1">
-</label>
-<label>Seller’s asking price ($, optional)
-<input id="ask" type="number" min="0" step=".01">
-</label>
+<section class="card"><h2>02 · Set your buying goals</h2><div class="fields">
+<div><div class="field-head"><label for="fee">Selling fees (%)</label><details class="tip"><summary aria-label="About selling fees">i</summary><span>Use your selling platform’s combined selling and payment-processing rate. Enter 0 for a fee-free sale. Rates vary; check your platform’s current terms. Put fixed fees in total selling costs.</span></details></div><input id="fee" type="number" min="0" max="100" step=".1"></div>
+<div><div class="field-head"><label for="costs">Total selling costs ($)</label><details class="tip"><summary aria-label="About total selling costs">i</summary><span>One total for the entire collection: seller-paid shipping, packing, grading, travel, and other expenses. Include only costs you expect to pay. Do not include the purchase price or percentage selling fees again.</span></details></div><input id="costs" type="number" min="0" step=".01"></div>
+<div><div class="field-head"><label for="margin">Target profit margin (%)</label><details class="tip"><summary aria-label="How to choose a profit margin">i</summary><span>Choose how much of gross sales you want to keep as profit after buying the collection and paying costs. At 30%, $1,000 in sales means $300 profit. Use more cushion for uncertain values, slow sales, or condition risk. The 30% starting value is an example, not a recommended industry rate. Margin is not markup or return on your purchase cost.</span></details></div><input id="margin" type="number" min="0" max="100" step=".1"></div>
+<div><div class="field-head"><label for="ask">Seller’s asking price ($)</label><details class="tip"><summary aria-label="About seller asking price">i</summary><span>Optional. Enter what the seller wants for the whole collection to see your projected profit and whether the price meets your target margin. Leave blank to calculate your offer ceiling only.</span></details></div><input id="ask" type="number" min="0" step=".01" placeholder="Optional"></div>
+</div><p class="hint">Hover over or tap an ⓘ for help with any value.</p></section>
 </div>
-<p><small>Margin means profit divided by gross sales.
-Shipping applies to each book or sellable lot entered.</small></p>
-</section>
-</div>
-<aside class="card offer">
-<h2>Your maximum offer</h2>
-<div id="offer" class="amount">$0</div>
-<p id="caption"></p>
-<hr>
-<div class="line"><span>Estimated gross sales</span>
-<strong id="gross"></strong></div>
-<div class="line"><span>Selling fees</span>
-<strong id="fees"></strong></div>
-<div class="line"><span>Shipping, prep & other</span>
-<strong id="expenses"></strong></div>
-<div class="line"><span>Target profit</span>
-<strong id="target"></strong></div>
-<hr>
-<div id="verdict"></div>
-<p><small style="color:#c5d5bf">Leave room for returns,
-condition surprises, and slow-moving inventory.</small></p>
-</aside>
-</div>
-<section class="card">
-<h2>03 · What if sale prices change?</h2>
-<div id="scenarios" class="scenarios"></div>
-</section>
-<div class="actions">
-<button id="export">Export estimate CSV</button>
-<button id="reset">Start fresh</button>
-</div>
-<p id="saved"></p>
-<footer>All amounts USD. Estimates, not appraisals.
-No live market pricing. Estimates stay in this browser.</footer>
+<aside class="card offer" aria-live="polite"><h2>Your maximum target offer</h2><div id="offer" class="amount">$0</div><p id="caption"></p><hr>
+<div class="line"><span>Estimated gross sales</span><strong id="gross"></strong></div>
+<div class="line"><span>Selling fees</span><strong id="fees"></strong></div>
+<div class="line"><span>Total selling costs</span><strong id="expenses"></strong></div>
+<div class="line"><span>Profit reserved at target</span><strong id="target"></strong></div><hr><div id="verdict"></div>
+<p class="hint">This is a ceiling, not a suggested opening offer. Buying below it leaves more profit.</p></aside></div>
+<section class="card"><h2>03 · Know your buying limits</h2><p class="limits-intro">Compare purchase-price ceilings before negotiating. These are amounts you pay for the collection, not prices you sell it for.</p><div id="limits" class="limits"></div><p class="hint">Cautious and target limits keep your chosen profit margin. Break-even keeps no profit. Fees change with resale value; total selling costs stay fixed. Negative ceilings display as $0 with a warning.</p></section>
+<div class="actions"><button id="export" type="button">Export estimate CSV</button><button id="reset" type="button">Start fresh</button></div><p id="storage"></p><footer class="footer">All amounts USD. Calculated with full precision; displayed amounts rounded to whole dollars. Estimates, not appraisals. No live pricing. No accounts or cloud collection storage.</footer>
 </main>
 <script>
+(()=>{
 const $=id=>document.getElementById(id);
-const money=n=>new Intl.NumberFormat("en-US",{
-style:"currency",currency:"USD",maximumFractionDigits:0
-}).format(n);
-const fresh=()=>({
-name:"",items:[{title:"",qty:1,price:0,prep:0}],
-fee:13,shipping:5,overhead:0,margin:30,ask:0
-});
+const money=n=>new Intl.NumberFormat('en-US',{style:'currency',currency:'USD',maximumFractionDigits:0}).format(n);
+const fresh=()=>({mode:'total',value:0,fee:13,costs:0,margin:30,ask:null,items:[{title:'',qty:1,price:0}]});
 let state=fresh();
-try{
-const value=JSON.parse(localStorage.getItem("panel-public-v1"));
-const keys=["fee","shipping","overhead","margin","ask"];
-if(value&&typeof value.name==="string"&&
-Array.isArray(value.items)&&value.items.every(i=>
-typeof i.title==="string"&&["qty","price","prep"].every(k=>
-Number.isFinite(i[k])&&i[k]>=0)&&
-Number.isInteger(i.qty)&&i.qty>=1)&&
-keys.every(k=>Number.isFinite(value[k])&&value[k]>=0)&&
-value.fee<=100&&value.margin<=100) state=value;
-}catch{}
-function calculate(factor=1){
-const gross=state.items.reduce((s,i)=>s+i.qty*i.price,0)*factor;
-const qty=state.items.reduce((s,i)=>s+i.qty,0);
-const fees=gross*state.fee/100;
-const expenses=state.items.reduce((s,i)=>s+i.qty*i.prep,0)
-+qty*state.shipping+state.overhead;
-const target=gross*state.margin/100;
-const raw=gross-fees-expenses-target;
-const profit=gross-fees-expenses-state.ask;
-return {gross,fees,expenses,target,raw,
-offer:Math.max(0,raw),profit};
-}
-function save(){
-try{
-localStorage.setItem("panel-public-v1",JSON.stringify(state));
-$("saved").textContent="● Saved in this browser";
-}catch{
-$("saved").textContent="Browser saving unavailable. Export to keep a copy.";
-}
-}
-function update(){
-const r=calculate();
-$("offer").textContent=money(r.offer);
-$("gross").textContent=money(r.gross);
-$("fees").textContent=money(-r.fees);
-$("expenses").textContent=money(-r.expenses);
-$("target").textContent=money(-r.target);
-$("caption").textContent=r.gross===0?
-"Add books and sale estimates to find your buying ceiling.":
-r.raw<0?"This target is not achievable even at a $0 purchase price.":
-"Buying ceiling for a "+state.margin+"% margin on gross sales.";
-$("verdict").textContent=state.ask>0?
-(r.raw>=state.ask?"Within target. ":"Above buying ceiling. ")+
-"At the asking price: "+money(r.profit)+" profit, "+
-(r.gross?r.profit/r.gross*100:0).toFixed(1)+"% margin.":
-"Enter an asking price to check the deal.";
-$("scenarios").replaceChildren();
-for(const [title,factor] of [
-["20% lower prices",.8],["Your estimate",1],["10% higher prices",1.1]
-]){
-const r=calculate(factor);
-const box=document.createElement("div");
-box.className="scenario";
-const label=document.createElement("span");
-label.textContent=title;
-const amount=document.createElement("strong");
-amount.textContent=money(r.offer);
-const note=document.createElement("small");
-note.textContent=r.raw<0?"Target unachievable":"maximum offer";
-box.append(label,amount,note);
-$("scenarios").append(box);
-}
-save();
-}
-function rows(){
-$("books").replaceChildren();
-state.items.forEach((item,index)=>{
-const row=document.createElement("tr");
-for(const key of ["title","qty","price","prep"]){
-const td=document.createElement("td");
-const input=document.createElement("input");
-input.value=item[key];
-input.setAttribute("aria-label",key+" for row "+(index+1));
-if(key==="title") input.placeholder="Title, issue, grade";
-else{
-input.type="number";
-input.min=key==="qty"?1:0;
-input.step=key==="qty"?1:.01;
-}
-input.oninput=()=>{
-if(key==="title") item[key]=input.value;
-else{
-let n=Math.max(key==="qty"?1:0,Number(input.value)||0);
-item[key]=key==="qty"?Math.floor(n):n;
-}
-update();
-};
-input.onchange=()=>input.value=item[key];
-td.append(input);
-row.append(td);
-}
-const td=document.createElement("td");
-const button=document.createElement("button");
-button.textContent="×";
-button.setAttribute("aria-label","Remove row "+(index+1));
-button.onclick=()=>{
-state.items.splice(index,1);rows();update();
-};
-td.append(button);row.append(td);$("books").append(row);
-});
-}
-function hydrate(){
-$("name").value=state.name;
-for(const key of ["fee","shipping","overhead","margin","ask"])
-$(key).value=state[key];
-rows();update();
-}
-$("name").oninput=e=>{state.name=e.target.value;save();};
-for(const key of ["fee","shipping","overhead","margin","ask"]){
-$(key).oninput=e=>{
-state[key]=Math.max(0,Math.min(
-["fee","margin"].includes(key)?100:Infinity,
-Number(e.target.value)||0));
-update();
-};
-$(key).onchange=()=>$(key).value=state[key];
-}
-$("add").onclick=()=>{
-state.items.push({title:"",qty:1,price:0,prep:0});
-rows();update();
-$("books").lastElementChild.querySelector("input").focus();
-};
-$("example").onclick=()=>{
-if(!confirm("Replace this estimate with sample data?"))return;
-state={name:"Example collection",
-items:[
-{title:"Amazing Spider-Man #300 · CGC 9.4",qty:1,price:650,prep:0},
-{title:"Uncanny X-Men #141 · raw VF",qty:2,price:120,prep:3},
-{title:"Bronze Age readers",qty:30,price:8,prep:0}
-],fee:13,shipping:5,overhead:25,margin:30,ask:400};
-hydrate();
-};
-$("reset").onclick=()=>{
-if(confirm("Clear this estimate?")){state=fresh();hydrate();}
-};
-$("export").onclick=()=>{
-const r=calculate();
-const rows=[
-["Collection",state.name],
-["Book","Quantity","Sale per book","Prep per book"],
-...state.items.map(i=>[i.title,i.qty,i.price,i.prep]),
-[],["Selling fee %",state.fee],
-["Shipping per book",state.shipping],
-["Other expenses",state.overhead],
-["Target margin %",state.margin],
-["Asking price",state.ask],
-["Gross sales",r.gross],
-["Maximum offer",r.offer],
-["Profit at asking price",r.profit]
-];
-const quote=v=>{
-if(typeof v==="string"&&/^[=+\-@\t\r\n]/.test(v))v="'"+v;
-return '"'+String(v).replaceAll('"','""')+'"';
-};
-const csv=rows.map(row=>row.map(quote).join(",")).join("\r\n");
-const url=URL.createObjectURL(new Blob(["\uFEFF"+csv],
-{type:"text/csv;charset=utf-8"}));
-const a=document.createElement("a");
-a.href=url;a.download="panel-estimate.csv";a.click();
-setTimeout(()=>URL.revokeObjectURL(url),1000);
-};
-hydrate();
-</script>
-</html>
+const valid=s=>s&&['total','books'].includes(s.mode)&&['value','fee','costs','margin'].every(k=>Number.isFinite(s[k])&&s[k]>=0)&&s.fee<=100&&s.margin<=100&&(s.ask===null||Number.isFinite(s.ask)&&s.ask>=0)&&Array.isArray(s.items)&&s.items.every(i=>typeof i.title==='string'&&Number.isInteger(i.qty)&&i.qty>=1&&Number.isFinite(i.price)&&i.price>=0);
+try{const saved=JSON.parse(localStorage.getItem('shogun-calculator-v2'));if(valid(saved))state=saved;}catch{}
+const bookValue=()=>state.items.reduce((sum,i)=>sum+i.qty*i.price,0);
+function calculate(gross,fee,costs,margin,ask){const fees=gross*fee/100;const target=gross*margin/100;const net=gross-fees-costs;const raw=net-target;return {gross,fees,costs,target,net,raw,offer:Math.max(0,raw),profit:net-(ask??0)};}
+function save(){try{localStorage.setItem('shogun-calculator-v2',JSON.stringify(state));$('storage').textContent='● Saved in this browser only';}catch{$('storage').textContent='Browser saving unavailable. Export a CSV to keep your estimate.';}}
+function update(){const gross=state.mode==='total'?state.value:bookValue();const r=calculate(gross,state.fee,state.costs,state.margin,state.ask);for(const [id,n] of Object.entries({offer:r.offer,gross:r.gross,fees:-r.fees,expenses:-r.costs,target:-r.target}))$(id).textContent=money(n);
+$('books-total').textContent=money(bookValue());$('caption').textContent=gross===0?'Enter an estimated resale value to calculate your buying ceiling.':r.raw<0?'Even paying $0 would not leave your target profit after costs.':`Pay no more than ${money(r.offer)} to keep a ${state.margin}% profit margin at your estimated resale value.`;
+const verdict=$('verdict');verdict.classList.toggle('warning',state.ask!==null&&state.ask>r.raw);verdict.textContent=state.ask===null?'Optional: enter the seller’s asking price to check the deal.':`${state.ask<=r.raw?'Meets your target.':'Below your target profit.'} At the asking price: ${money(r.profit)} projected ${r.profit<0?'loss':'profit'}${gross?` (${(r.profit/gross*100).toFixed(1)}% margin)`:''}.`;
+$('limits').replaceChildren();for(const [title,base,margin,description] of [
+['Cautious offer limit',gross*.8,state.margin,'If resale brings in 20% less than you expect.'],
+['Your target offer limit',gross,state.margin,'If the collection sells for your entered estimate.'],
+['Break-even ceiling',gross,0,'At your entered estimate, this leaves $0 profit. Paying more means a projected loss.']
+]){const result=calculate(base,state.fee,state.costs,margin,null);const box=document.createElement('div');box.className='limit'+(title.startsWith('Your')?' target':'');const h=document.createElement('h3');h.textContent=title;const amount=document.createElement('strong');amount.textContent=money(result.offer);const p=document.createElement('p');p.textContent=description;const small=document.createElement('small');small.textContent=result.raw<0?'Not achievable: costs exceed available proceeds even at a $0 purchase.':`${money(base)} gross sales · ${margin}% profit margin`;box.append(h,amount,p,small);$('limits').append(box);}save();}
+function rows(){$('books').replaceChildren();state.items.forEach((item,index)=>{const row=document.createElement('tr');for(const key of ['title','qty','price']){const td=document.createElement('td');const input=document.createElement('input');input.value=item[key];input.setAttribute('aria-label',`${key} for book ${index+1}`);if(key==='title'){input.placeholder='Title / issue (optional)';input.maxLength=200;}else{input.type='number';input.min=key==='qty'?1:0;input.step=key==='qty'?1:.01;}input.oninput=()=>{if(key==='title')item[key]=input.value;else{const n=Number(input.value);item[key]=Number.isFinite(n)?Math.max(key==='qty'?1:0,key==='qty'?Math.floor(n):n):key==='qty'?1:0;}update();};input.onchange=()=>input.value=item[key];td.append(input);row.append(td);}const td=document.createElement('td');const b=document.createElement('button');b.textContent='×';b.setAttribute('aria-label',`Remove book ${index+1}`);b.onclick=()=>{state.items.splice(index,1);rows();update();};td.append(b);row.append(td);$('books').append(row);});}
+function mode(value){state.mode=value;$('total-mode').setAttribute('aria-pressed',value==='total');$('books-mode').setAttribute('aria-pressed',value==='books');$('total-panel').hidden=value!=='total';$('books-panel').hidden=value!=='books';update();}
+function hydrate(){for(const k of ['value','fee','costs','margin','ask'])$(k).value=state[k]===null||k==='value'&&state[k]===0?'':state[k];rows();mode(state.mode);}
+for(const k of ['value','fee','costs','margin','ask']){$(k).oninput=e=>{const n=Number(e.target.value);state[k]=k==='ask'&&e.target.value===''?null:Math.max(0,Math.min(['fee','margin'].includes(k)?100:1e12,Number.isFinite(n)?n:0));update();};$(k).onchange=()=>$(k).value=state[k]??'';}
+$('total-mode').onclick=()=>mode('total');$('books-mode').onclick=()=>mode('books');$('add').onclick=()=>{state.items.push({title:'',qty:1,price:0});rows();update();$('books').lastElementChild.querySelector('input').focus();};$('reset').onclick=()=>{if(confirm('Clear this estimate and start fresh?')){state=fresh();hydrate();}};
+$('export').onclick=()=>{const gross=state.mode==='total'?state.value:bookValue();const r=calculate(gross,state.fee,state.costs,state.margin,state.ask);const cautious=calculate(gross*.8,state.fee,state.costs,state.margin,null);const records=[['Shogun Comics Buying Calculator'],['Input mode',state.mode],['Estimated gross sales',gross],['Selling fees (%)',state.fee],['Total selling costs',state.costs],['Target margin (%)',state.margin],['Seller asking price',state.ask??'Not entered'],['Target offer ceiling',r.offer],['Target achievable at zero purchase price',r.raw>=0?'Yes':'No'],['Cautious offer ceiling (20% lower sales)',cautious.offer],['Cautious target achievable at zero purchase price',cautious.raw>=0?'Yes':'No'],['Break-even ceiling (zero profit)',Math.max(0,r.net)],['Break-even achievable at zero purchase price',r.net>=0?'Yes':'No']];if(state.ask!==null)records.push(['Projected profit at asking price',r.profit]);if(state.mode==='books')records.push([],['Book','Quantity','Sale per book'],...state.items.map(i=>[i.title,i.qty,i.price]));records.push([],['All amounts USD. User estimates; not appraisals.']);const quote=v=>{if(typeof v==='string'&&/^[=+\-@\t\r\n]/.test(v))v="'"+v;return '"'+String(v).replaceAll('"','""')+'"';};const url=URL.createObjectURL(new Blob(['\uFEFF'+records.map(row=>row.map(quote).join(',')).join('\r\n')],{type:'text/csv;charset=utf-8'}));const a=document.createElement('a');a.href=url;a.download='shogun-buying-estimate.csv';a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);};hydrate();
+})();
+</script></body></html>
